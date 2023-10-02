@@ -22,6 +22,7 @@ AutoGainControlAudioProcessor::AutoGainControlAudioProcessor()
                        )
 #endif
 {
+
 }
 
 AutoGainControlAudioProcessor::~AutoGainControlAudioProcessor()
@@ -150,11 +151,38 @@ void AutoGainControlAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+
+    float currentPeakLevel = 0.0f; //initialize with a low value
+    float targetPeakLevel = 0.1f;
+    float gain = 1.0f;
+    float smoothingFactor = 0.95f;  // Adjust as needed for smoothing
+
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
+        auto* channelData = buffer.getWritePointer(channel);
 
-        // ..do something to the data...
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            float sampleValue = channelData[sample];
+
+            float absSampleValue = std::abs(sampleValue);
+
+            if (absSampleValue > currentPeakLevel)
+            {
+                // Calculate the new peak level with smoothing
+                currentPeakLevel = (1.0f - smoothingFactor) * absSampleValue + smoothingFactor * currentPeakLevel;
+            }
+
+
+            // Apply gain adjustment when a new peak is found
+            if (currentPeakLevel > targetPeakLevel)
+            {
+                gain = targetPeakLevel / currentPeakLevel;
+            }
+
+            // Apply the gain to the current sample
+            channelData[sample] *= gain;
+        }
     }
 }
 

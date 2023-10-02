@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="iz52gI" name="AutoGain Control" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="17">
   <MAINGROUP id="YKF5HP" name="AutoGain Control">
     <GROUP id="{520F4685-5A54-6F4B-11D2-2D8B2A92BB87}" name="Source">
       <FILE id="SJxexR" name="PluginProcessor.cpp" compile="1" resource="0"
